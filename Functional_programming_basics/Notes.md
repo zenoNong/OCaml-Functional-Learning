@@ -12,13 +12,6 @@ the evaluation of mathematical functions and avoids changing state and mutable d
 - Recursion
 - Referential Transparency
   
-- Pure Function
-- Immutability
-- First-Class Functions
-- Higher-Order Functions
-- Recursion
-- Referential Transparency
-  
 ### 1. Pure Functions
 - Same Input -> Same Output(Determinism), No side effects i.e. no global variable modification, no R/W file, no print log, no mutate input.
 - Note: Impure break at least one of these two rules. 

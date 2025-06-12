@@ -121,9 +121,3 @@ let compose f g x = f (g x)
 - F#
 - Scala (hybrid)
 - Clojure
-
-## References
-
-- [OCaml Documentation](https://ocaml.org/docs/)
-- [Real World OCaml](https://dev.realworldocaml.org/)
-- [Functional Programming: Concepts and Examples](https://ocaml.org/learn/tutorials/)

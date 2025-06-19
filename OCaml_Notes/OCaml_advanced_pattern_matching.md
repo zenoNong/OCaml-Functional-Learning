@@ -82,16 +82,12 @@ type mon = {
 ```ocaml
 (* OK *)
 let get_hp m = match m with { name = n; hp = h; ptype = t } -> h
-
 (* better *)
 let get_hp m = match m with { name = _; hp = h; ptype = _ } -> h
-
 (* better *)
 let get_hp m = match m with { name; hp; ptype } -> hp
-
 (* better *)
 let get_hp m = match m with { hp } -> hp
-
 (* best *)
 let get_hp m = m.hp
 ```
@@ -108,15 +104,12 @@ These are predefined in `Stdlib`.
 ```ocaml
 (* OK *)
 let thrd t = match t with x, y, z -> z
-
 (* good *)
 let thrd t = let x, y, z = t in z
-
 (* better *)
 let thrd t = let _, _, z = t in z
-
 (* best *)
 let thrd (_, _, z) = z
 ```
 
-> ⚠️ Standard library only includes `fst` and `snd`, not for 3+ tuples.
+> Standard library only includes `fst` and `snd`, not for 3+ tuples.

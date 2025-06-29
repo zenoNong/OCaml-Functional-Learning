@@ -63,7 +63,7 @@ In Ocaml everything is an `expression` and the primary goal is to evaluate it to
     - Sequence of chars withing **" "** such as "abc".
     - The string `concatenation operator` is **`^`**
     - Some conversion: `string_of_int`, `string_of_float`,  `string_of_bool`, `int_of_string`, `float_of_string`, and `bool_of_string` . There is no `string_of_char` but can use the library function, `String.make` to do it. No `char_of_string` but we can access individual characters withh `0-based index`.
-    
+
     ```ocaml
     "abc" ^ "def"
     - : string = "abcdef"
@@ -78,30 +78,17 @@ In Ocaml everything is an `expression` and the primary goal is to evaluate it to
     "abc".[3]
     Exception: Invalid_argument "index out of bounds".
     ```
-## Assertions
-- It acts as a **mini runtime checkpoint** embedded int the code. The expressin **assert e** evaluates **e**. If **true** nothing happens, if **false** it raise exception and stop executon.
-  ```ocaml
-  let () = assert (f input1 = output1)
-  (*Those assert that f input1 should be output1, and so forth. The let () = ... part of those is used to handle the unit value returned by each assertion.*)
-  let f x = x + 1;;
-  val f : int -> int = <fun>
-  let () = assert (f 3 = 3);;
-  Exception: Assert_failure ("//toplevel//", 1, 9).
-  let () = assert (f 3 = 4);;
-  ```
+    
 ## If Expressions
-- The expression **if e1 then e2 else e3** evaluates to  e2 if e1 evaluates to true, and to e3 otherwise. We call **e1** the guard of the if expression.
+- The expression **`if e1 then e2 else e3`** evaluates to  `e2` if `e1` evaluates to `true`, and to `e3` otherwise. We call **`e1`** the guard of the if expression.
 - It is similar to the ternary operator **? :**  and can be put anywhere.
-- If expressions can be nested: ***if e1 then e2 else if e3 then e4 else ..... else en***. Here the last en is compulsory.
+- If expressions can be nested: ***`if e1 then e2 else if e3 then e4 else ..... else en`***. Here the last en is compulsory.
 
 ## Let Expression
 -  It binds a value of an expression to a name. Various ways to use it:
     ```ocaml
-    let x = 42;;
-    val x : int = 42
-
-    let x = 42 in x + 1
-    - : int = 43
+    let x = 42;;        (*  val x : int = 42 *)
+    let x = 42 in x + 1 (* - : int = 43*)
 
     (let x = 42) + 1
     Error: Syntax error 
@@ -113,12 +100,14 @@ In Ocaml everything is an `expression` and the primary goal is to evaluate it to
     ```
   - A new binding of a variable shadows any old binding of the variable name. But eventually the old binding could reappear as the shadow recedes.
 
+
 # FUNCTIONS
-Theya are the buildig blocks of OCaml.
 ## Function Definition
-- Definitions are not expressions, nor are expressions definitions—they are distinct syntactic classes. For example: let x = 42;; is not expressin but a function definition where value 42 is being bound to the name x;
-- Recursive function are defined like this: ***let rec f x1 x2 ... xn = e***
-- Mutually recursive functions can be defined with the ***and*** keyword:
+- Definition introduce a binding unlike expression which compute a value. For ex: `let x = 42` is not expressin but a `function definition` where value 42 is being bound to the name x. But `x+1` is an `expression` as it computes t `43`.
+  - Definitions: (`let`, `let rec`, `type`, `module`) extend the environment, they change what names are known.
+  - Expressions: (like `42`, `x + 1`, `fun x -> x + 1`) are evaluated to produce a value, using the current environment.
+- `Recursive function` are defined like this: ***`let rec f x1 x2 ... xn = e`***
+- `Mutually recursive functions` can be defined with the ***`and`*** keyword.
     ```ocaml
     let rec even n = 
     n = 0 || odd (n-1)
@@ -129,15 +118,15 @@ Theya are the buildig blocks of OCaml.
       val odd : int -> bool = <fun>*)
     ```
 ## Function application
-- Function application in OCaml is written like `f x`, without parentheses.
-- OCaml functions take exactly **one argument**, but through *currying*, they can appear to take multiple.
+- It is written like `f x`, without parentheses.
+- OCaml functions take exactly **`one argument`**, but through *`currying`*, they can appear to take `multiple`.
 - The operator `|>` is **reverse function application**:
   ```ocaml
   e1 |> e2   ≡   e2 e1
 
 ## Anonymous Functions
-- Like values are not needed to be bound to name, function also don't need to have name.
-- ***fun*** is a keyword indicating an anonymous function. ***fun x1 ... xn -> e***
+- Like values are `not needed to be bound or bound to a name`.
+- ***`fun`*** is a keyword indicating an anonymous function. ***`fun x1 ... xn -> e`***
   ```ocaml
   let inc x = x + 1
   let inc = fun x -> x + 1
@@ -146,7 +135,7 @@ Theya are the buildig blocks of OCaml.
   (*They are syntactically different but semantically equivalent.*)
   ```
 ## Pipeline
-- It is an infix operator and written as |> to make simplification in function applicatioon which use lots of parenthateis.
+- It is an `infix operator` and written as `|>` to make simplification in function applicatioon which use lots of parenthateis.
   ```ocaml
   let inc x = x + 1;;
   let square x = x * x;;
@@ -159,35 +148,26 @@ Theya are the buildig blocks of OCaml.
 ## Polymorphic funcitions
 - Consider the code:
     ```ocaml
-    let id x = x
-    (* val id : 'a -> 'a = <fun> *)
+    let id x = x   (* val id : 'a -> 'a = <fun> , it is same with the below*)
     let id = fun x -> x
 
     id 42        (* int → 42 *)
     id true      (* bool → true *)
     id "hello"   (* string → "hello" *)
     ```
-- Here 'a is a type variable, meaning id works for all types (int, bool, string, etc.).
-- Type variables begin with ', e.g., 'a, 'b, 'c.
+- Here `'a` is a type variable, so `id` works for all types (`int`, `bool`, `string`, etc.).
 - **Restricting Polymorphism with Type Annotation:**
   ```ocaml
   let id_int (x : int) : int = x  (* val id_int : int -> int *)
   id_int true  (* Error: expects int, got bool *)
-
-  (*We can assign a more restrictive type to a polymorphic function below:*)
-  let id_int' : int -> int = id
-  (*This is safe because we're discarding extra generality, not breaking any contracts.*)
   ```
+
 ## Partial Application
 - Partial application = apply a function to fewer args than it expects.
   ```ocaml
-    let add x y = x + y
-    let add5 = add 5
-    add5 2   (* 7 *)
-    (*Equivalent codes*)
-    let add x y = x + y
-    let add x = fun y -> x + y
-    let add = fun x -> fun y -> x + y
+    let add x y = x + y  (* val add : int -> int -> int = <fun> *)
+    let add5 = add 5     (* val add5 : int -> int = <fun>, applying with fewer args *)
+    add5 2   (* gives 7 *)
   ```
   
 ## Function Associativity
@@ -207,20 +187,19 @@ Theya are the buildig blocks of OCaml.
   ( + ) 3 4       (* → 7 *)
   let add3 = ( + ) 3
   add3 2          (* → 5 *)
-  (* Be cautious with (*)-(* is start of comment, so  needs to be written ( * ). *)
+
+  let ( ^^ ) x y = max x y (* Custom infix operator *)
+  2 ^^ 3   (* gives 3 *)
   ```
-- You can define custom infix operators:
-  ```ocaml
-  let ( ^^ ) x y = max x y
-  2 ^^ 3   (* 3 *)
-  ```
+
 ## Tail Recursion
 - **The Problem:** Recursive functions consume stack space:
   ```ocaml
   let rec count n =
-    if n = 0 then 0 else 1 + count (n - 1)
-  (*Fails for large n:*)
-  count 1_000_000   (* Stack overflow *)
+    if n = 0 then 0 else 1 + count (n - 1) 
+  (* Each recursive call computes count(n-1) and still need to add +1 which can't be resolved until the function returns, so each call is kept in stack*)
+
+  count 1_000_000   (* Stack overflow fails for large n *)
   ```
 - Solution using tail recursive version:
   ```ocaml
@@ -228,118 +207,19 @@ Theya are the buildig blocks of OCaml.
     if n = 0 then acc else count_aux (n - 1) (acc + 1)
 
   let count_tr n = count_aux n 0
-  (*Recursive call is in tail position: last thing done in the function.*)
   (*Stack frame is reused = no stack overflow. The value is accumulated and the fuction need not to maintain stack frame*)
   ```
-# Documenting OCaml Code with OCamldoc
-
-- OCaml provides a built-in documentation tool called **OCamldoc**, similar to Java’s Javadoc.  
-- It extracts **specially formatted comments** from source files and renders them as HTML for easier readability.
-
----
-
-## How to Document:
-  ```ocaml
-  (** [sum lst] is the sum of the elements of [lst]. *)
-  let rec sum lst = ...
-  ```
-- (** ... *) denotes an OCamldoc comment.
-
-- [...] indicates inline code formatting (rendered as monospaced in HTML).
-
-- Supported Tags:
-OCamldoc supports various tags, similar to Javadoc:
-- @author
-- @param
-- @return
-- @deprecated
-- @raise, etc.
-
-- However, in idiomatic OCaml, these are used sparingly or avoided in favor of clear, declarative prose.
-
-## What to Document
-- OCaml favors a concise and declarative style, similar to its standard library.
-
-- Good Style (Concise, Declarative):
-  ```ocaml
-  (** [sum lst] is the sum of the elements of [lst]. *)
-  let rec sum lst = ...
-  (*The doc starts with an example usage: sum lst.*)
-
-  (*The word "is" emphasizes a mathematical description, not an imperative one.*)
-
-  (*The comment uses actual argument names to explain behavior.*)
-  ```
-
-
-- Bad Style (Too Verbose, Redundant):
-  ```ocaml
-  (** Sum a list.
-      @param lst The list to be summed.
-      @return The sum of the list. *)
-  let rec sum lst = ...
-  (* This verbose style says no more than the concise version but is harder to read. *)
-  ```
-
-- Enhanced with Edge Case:
-  ```ocaml
-  (** [sum lst] is the sum of the elements of [lst].
-      The sum of an empty list is 0. *)
-  let rec sum lst = ...
-  (*Clearly documents edge case behavior.*)```
-
-## Preconditions and Postconditions
-- These are concepts from formal methods:
-
-  - **Preconditions**: What must be true before a function runs.
-
-  - **Postconditions**: What is guaranteed after the function runs.
-
-- Examples:
-  ```ocaml
-  (** [lowercase_ascii c] is the lowercase ASCII equivalent of character [c]. *)
-
-  (** [index s c] is the index of the first occurrence of character [c] in string [s].
-      Raises: [Not_found] if [c] does not occur in [s]. *)
-
-  (** [random_int bound] is a random integer between 0 (inclusive) and [bound] (exclusive).
-      Requires: [bound] is greater than 0 and less than 2^30. *)
-    ```
-- Interpretation:
-  - The Raises: clause is a postcondition — it tells when the function will raise an exception.
-
-  - The Requires: clause is a precondition — it tells what input constraints must be satisfied.
-
-- What Not to Do:
-Avoid writing obvious preconditions like:
-  ```ocaml
-  (** [lowercase_ascii c] is the lowercase ASCII equivalent of [c].
-      Requires: [c] is a character. *)
-  (* This is redundant and unidiomatic in OCaml.
-
-  The type checker already enforces that c is a char, so this adds no value.*)
-  ```
-## Summary
-  | Feature             | Description                                           |
-| ------------------ | ----------------------------------------------------- |
-| `(** ... *)`        | OCamldoc comment syntax                               |
-| `[...]`             | Monospaced code formatting                            |
-| Declarative style   | Start with `[function arguments] is ...`              |
-| Avoid Javadoc style | No need for `@param` / `@return` unless truly helpful |
-| Document edge cases | e.g., behavior on empty list                          |
-| `Requires:` clause  | For true preconditions (not type info)                |
-| `Raises:` clause    | Document exceptions and when they occur               |
-
 # Printing Basics
-- OCaml provides built-in printing functions for primitive types:
+- OCaml don't support function overloading, so we use `type-specific` functions or `Printf.printf` with type specifiers:
   ```ocaml
-  print_char   : char -> unit
-  print_string : string -> unit
-  print_int    : int -> unit
+  print_char 'a'  : char -> unit
+  print_string "hello": string -> unit
+  print_int 3   : int -> unit
   print_float  : float -> unit
   print_endline: string -> unit
+
+  Printf.printf "%d %s %f\n" 42 "world" 3.14;;
   ```
-- print_endline "hello" prints "hello" followed by a newline.
 
 - All return type unit, which has only one value: () OCaml’s equivalent of void in Java or None in Python.
 

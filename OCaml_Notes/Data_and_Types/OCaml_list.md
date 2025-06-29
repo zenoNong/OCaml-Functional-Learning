@@ -1,46 +1,49 @@
 
 # OCaml Lists
 
-This note covers  all topics lie list construction, access, pattern matching, immutability, tail recursion, and more.
-
----
-
 ## Building Lists
-
-- OCaml lists are **singly-linked**, **homogeneous** (same type), and **immutable**.
-
+- OCaml lists are **`singly-linked`**, **`homogeneous`** (same type), and **`immutable`**.
   ```ocaml
   []              (* empty list, named nil *)
   e1 :: e2        (* cons: add e1 to front of e2, :: is right associative *)
   [e1; e2; e3]    (* syntactic sugar for e1 :: e2 :: e3 :: [] *)
+  [e1;e2]@[e4;e5] (* adding to lists *)
   ```
+
 ## Accessing Lists
-- Using **pattern matching** to decompose lists:
+- Using **`pattern matching`** to decompose lists:
   ```ocaml
   let rec sum lst =
     match lst with
     | [] -> 0
     | h :: t -> h + sum t
   ```
-    - NB: `x :: xs` → head and tail,  `_ :: _` → ignore elements
 
-- **Standard library**:
+- **`Standard library`**:
 
   ```ocaml
   List.length [1;2;3]       (* will returns 3 *)
-  [1;2] @ [3;4]             (* it appends: [1;2;3;4] *)
+  List.nth [3;4;5;6] 0      (* access the 0-indexed element of the list*)
   List.hd [1;2;3]           (* it return the head element, 1 *)
+  List.rev [1; 2; 3]           (* reverse: [3; 2; 1] *)
+  List.map (fun x -> x * 2) [1; 2; 3]   (* [2; 4; 6] *)
+  List.fold_left ( + ) 0 [1; 2; 3]      (* 6, left fold: (((0+1)+2)+3) *)
+  List.filter (fun x -> x mod 2 = 0) [1;2;3;4]   (* keeps even: [2; 4] *)
+  List.exists (fun x -> x > 3) [1;2;3]     (* returns true *)
+  List.for_all (fun x -> x < 5) [1;2;3]    (* returns true *)
+  List.find (fun x -> x mod 2 = 0) [1;3;4] (* returns 4, first match *)
+  List.mem 2 [1;2;3]             (* returns true if 2 is in the list *)
+  List.init 5 (fun x -> x * x)  (* [0; 1; 4; 9; 16] — builds list from 0 to 4 *)
   ```
----
 
 ## Immutability
-
-- Lists are **immutable** meaning, elements can't be changed in-place, list can't be modified.
+- Lists are **`immutable`** meaning, `elements can't be changed in-place`, `list can't be modified`.
 
   ```ocaml
   let lst = [1;2]
   lst[0] <- 42 (* will give error, in-place value can't be changed *)
   let new_list = 0::lst (*new_list is [0;1;2] but lst is still [1;2]*)
+  (* Here lst porting is not copied, instead it same memory lst is shared as tail of new_list*)
   ```
 
 - OCaml **shares** the tail when building new lists, not copies -> memory & time efficient, immutable.
@@ -101,7 +104,7 @@ This note covers  all topics lie list construction, access, pattern matching, im
 ## List Comprehensions
 
 - OCaml does **not** have list comprehensions like Python or Haskell.
-- Tasks like filtering/mapping are handled with **higher-order functions** and **pipeline operator (**\`\`**)**.
+- Tasks like `filtering`/`mapping` are handled with **`higher-order functions`** and **`pipeline operator |>`**.
     ```ocaml
     (* Python: [x*2 for x in range(10)] *)
     let doubled = 

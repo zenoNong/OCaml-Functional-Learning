@@ -5,14 +5,22 @@ Variants are data types where a value can be **one of several possibilities**, l
 ## Defining Variants & Constructing Values
 
 ```ocaml
+let x = 5     (* val x : int = 5, similar to this *)
 type day = Mon | Tue |Wed | Thur | Fri | Sat;;
 let d = Mon;; (*val d : day = Mon*)
 ```
 
-- Each option (`Sun`, `Mon`, ...) is a **constructor**.
-- Constructor names **must start with uppercase** letters.
+- Each option (`Sun`, `Mon`, ...) is a **`constructor`** and name must start with uppercase.
+  ```ocaml
+  type shape =
+    | Circle of float
+    | Rectangle of float * float
 
-## Accessing Variants — Pattern Matching
+  let s1 = Circle 3.0 (* val s1 : shape = Circle 4.*)
+  (* Here, Circle and Rectangle are constructors with arguments, used to distinguish not just the form of the data, but also what kind of data. *)
+  ```
+
+## Accessing Variants: Pattern Matching
 
 ```ocaml
 let int_of_day d =
@@ -25,13 +33,11 @@ let int_of_day d =
   | Fri -> 6
   | Sat -> 7
   (*OCaml **does not** automatically map constructors to ints.*)
+  let match_shape = function 
+    | Circle r -> "Circle"
+    | Rectangle (x,y) -> "Rectangle";;
 ```
 
-
-## Semantics
-
-- **Dynamic**: A constructor is a value (no computation).
-- **Static**: If `t = ... | C | ...`, then `C : t`
 
 ## Scope
 

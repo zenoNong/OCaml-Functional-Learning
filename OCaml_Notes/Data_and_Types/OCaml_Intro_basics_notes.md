@@ -1,9 +1,6 @@
 # OCaml Notes
 
-## Basics
-  OCaml is a functional programming language. It uses the Lambda-Calculus framework in it's internal working and static type system for early detection of error in the code.
-
-  Some basic codes are: 
+  OCaml is a `functional programming language`. It uses the `Lambda-Calculus framework` in it's internal working and `static type system` for early detection of error in the code. 
   ```ocaml
   let rec add x y = 
     if x = 0 then y else add (x-1) (y+1);;
@@ -11,16 +8,7 @@
     (* a simple program to add two number using recursion*)
   ```
 ## Data Types
-There are many data tyes. They are:
-- int 
-- float
-- char
-- boolean
-- string
-- predefined data structures like tuples, array, list.
-- also can create own data structures by records adn variants.
-
-Some example codes:
+There are many data tyes. They are: `int` , `float`, `char`, `boolean`, `string`, predefined data structures like `tuples`, `array`, `list`., also can create own data structures by records adn variants.
 
 ```ocaml
     # let x = 10 ;; (*-val x : int = 10*)
@@ -31,43 +19,34 @@ Some example codes:
     # 'a';; (*- : char = 'a'*)
     
     # {|This is a quoted string, here, neither \ nor " are special characters|};; (*- : string = "This is a quoted string, here, neither \\ nor \" are special characters" *)
-```
-**Some details about list data structure**
-It can be created using [ ] where elements are seperated by **;** (not ,). Or, we can join element to list with **::**(cons) or list to list using **@** operator
-```ocaml
-let list = [1;2;3] (*val list : int list = [1; 2; 3]*)
-5::list ;; (*- : int list = [5; 1; 2; 3]*)
-[7]@list ;; (*- : int list = [7; 1; 2; 3]*)
-```
+
+    # let list = [1;2;3] (*val list : int list = [1; 2; 3]*)
+    # 5::list ;; (*- : int list = [5; 1; 2; 3], here an element is appended at the front usng the :: (cons) operator *)
+    # [7]@list ;; (*- : int list = [7; 1; 2; 3], here a list is appended using the @ operator *)
+  ```
+
 ## Expressions
-In Ocaml everything is an expression and the primary goal is to evaluate it to a value(it has no further computation). It can be **2, true, "hello"** etc
+In Ocaml everything is an `expression` and the primary goal is to evaluate it to a `value`(it has no further computation) like  `2`, `true`, `"hello"` etc
 
 ## Primitive types and Values
 ### 1. int: Integers.
-- Usual interger are say 1, 2, etc. And operators are available: +, -, *, /, and mod. It is of size 64 bit.
+- Usual interger are say 1, 2, etc. And `operators` are available: `+`, `-`, `*`, `/`, and `mod`. It is of size `64 bit`.
 - Code example:
   ```ocaml
-  65 / 60
-  - : int = 1
-  65 mod 60
-  - : int = 5
+  65 / 60   (* - : int = 1 *)
+  65 mod 60 (*  - : int = 5 *)
   ```
   ### 2. Type float: Floating-point numbers. 
-  - Syntactically, they must always contain a dot, for eg. **" 3.14 or 3.0 or even 3.. "** Operators are +., -., *., /.
-  - There is not automatic comversion. We have to use built_in functions like **int_of_float, float_of_int.** There can be rounding errors also.
+  - Syntactically, they must always contain a dot, for eg. **" 3.14 or 3.0 or even 3.. "** Operators are `+.`, `-.`, `*.`, `/.`
+  - There is not automatic comversion. We have to use built_in functions like **`int_of_float`, `float_of_int`.** There can be rounding errors also.
   ```ocaml
-  3.14 *. (float_of_int 2)
-  - : float = 6.28
-  0.1 +. 0.2
-  - : float = 0.300000000000000044
+  3.14 *. (float_of_int 2) (* - : float = 6.28*)
+  0.1 +. 0.2               (* - : float = 0.300000000000000044*)
   ```
 
   ### 3. bool: Booleans
-  - It give **true or false**. Some operators are: **&&, ||, >, <, =, ==** etc
-  - Note: difference in = and == operator.
-    - the = operator check structural equality. Works deeply, like a recursive comparison for compound data (lists, records, etc.).
-    - the == operator physical equality(memory address)
-    - More detailed: there are two equality operators in OCaml, = and ==, with corresponding inequality operators <> and !=. Operators = and <> examine structural equality whereas == and != examine physical equality.
+  - It give **`true` or `false`**. Some operators are: `&&`, `||`, `>`, `<`, `=`, `==` etc
+  - There are two `equality operators` in OCaml, `=` and `==`, with corresponding `inequality operators` `<>` and `!=`. Operators = and <> examine `structural equality` whereas == and != examine `physical equality` like memory address, etc.
     ```ocaml
     let x = [1; 2];;
     let y = x;;
@@ -78,13 +57,13 @@ In Ocaml everything is an expression and the primary goal is to evaluate it to a
     x = z (* true - same structure*)
     ```
   ### 4. Type char: Characters
-  - It is written with single quote 'a','b' etc. It is 8-bits. 
-  - Some conversion: **char_of_int, int_of_char**.
+  - It is written with single quote 'a','b' etc. It is `8-bits`. 
+  - Some conversion: **`char_of_int`, `int_of_char`**.
   ### 4. Type string: Strings
     - Sequence of chars withing **" "** such as "abc".
-    - The string concatenation operator is **^**
-    - Some conversion: **string_of_int, string_of_float,  string_of_bool**. There is no **string_of_char**. But can use the library function, String.make to do it.
-    - For the same three primitive types, there are built-in functions to convert from a string if possible: **int_of_string, float_of_string, and bool_of_string**. No char_of_string but we can access individual characters withh 0-based index.
+    - The string `concatenation operator` is **`^`**
+    - Some conversion: `string_of_int`, `string_of_float`,  `string_of_bool`, `int_of_string`, `float_of_string`, and `bool_of_string` . There is no `string_of_char` but can use the library function, `String.make` to do it. No `char_of_string` but we can access individual characters withh `0-based index`.
+    
     ```ocaml
     "abc" ^ "def"
     - : string = "abcdef"

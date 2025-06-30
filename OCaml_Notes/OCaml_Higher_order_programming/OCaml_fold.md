@@ -1,12 +1,5 @@
-Here’s a **concise yet comprehensive summary** of **Section 4.4: `fold`** in OCaml, with all important technical points included:
-
----
-
-## 📘 4.4. `fold` – Summary Notes
-
----
-
-### 🔧 **What is Fold?**
+# `fold`
+## **What is Fold?**
 
 * `fold` **reduces** a list to a single value by **combining** its elements.
 * Generalizes operations like **sum**, **concat**, etc.
@@ -14,7 +7,7 @@ Here’s a **concise yet comprehensive summary** of **Section 4.4: `fold`** in O
 
 ---
 
-## 🔹 4.4.1. `combine` (Foundation for Fold)
+# `combine` (Foundation for Fold)
 
 ```ocaml
 let rec combine op init = function
@@ -35,7 +28,7 @@ let rec combine op init = function
 
 ---
 
-## 🔹 4.4.2. `fold_right`
+# `fold_right`
 
 ```ocaml
 let rec fold_right f lst acc =
@@ -48,11 +41,11 @@ let rec fold_right f lst acc =
 * Example: `fold_right ( + ) [1;2;3] 0` → `1 + (2 + (3 + 0))`
 * Not tail-recursive
 
-🧠 **Use when combining from right matters**, e.g., list construction.
+**Use when combining from right matters**, e.g., list construction.
 
 ---
 
-## 🔹 4.4.3. Tail Recursion & `combine_tr`
+# Tail Recursion & `combine_tr`
 
 ```ocaml
 let rec combine_tr f acc = function
@@ -69,7 +62,7 @@ let rec combine_tr f acc = function
 
 ---
 
-## 🔹 4.4.4. `fold_left`
+# `fold_left`
 
 ```ocaml
 let rec fold_left f acc = function
@@ -88,17 +81,17 @@ let rec fold_left f acc = function
 
 ---
 
-## 🔸 fold\_left vs. fold\_right
+# fold\_left vs. fold\_right
 
 | Feature             | `fold_left`                     | `fold_right`                       |
 | ------------------- | ------------------------------- | ---------------------------------- |
 | Direction           | Left-to-right                   | Right-to-left                      |
-| Tail-recursive      | ✅ Yes                           | ❌ No                               |
+| Tail-recursive      | Yes                             | No                                 |
 | Argument Order      | `f acc x`                       | `f x acc`                          |
 | Suitable For        | Accumulating (e.g., sum)        | Constructive recursion (e.g., map) |
 | Commutativity Safe? | Only if operator is commutative | Depends on operation               |
 
-📌 Use **`ListLabels`** module for clarity with labeled arguments:
+Use **`ListLabels`** module for clarity with labeled arguments:
 
 ```ocaml
 ListLabels.fold_left ~f:(fun acc x -> ...) ~init:... list
@@ -107,7 +100,7 @@ ListLabels.fold_right ~f:(fun x acc -> ...) ~init:... list
 
 ---
 
-## 🔹 4.4.6. Labeled Fold (Custom)
+# Labeled Fold (Custom)
 
 You can define fold with fully labeled arguments:
 
@@ -119,7 +112,7 @@ But standard operators like `( + )` can’t be passed directly unless redefined 
 
 ---
 
-## 🔹 4.4.7. Fold is Powerful – Can Implement:
+# Fold is Powerful – Can Implement:
 
 ```ocaml
 let length lst = List.fold_left (fun acc _ -> acc + 1) 0 lst
@@ -128,32 +121,28 @@ let map f lst = List.fold_right (fun x acc -> f x :: acc) lst []
 let filter f lst = List.fold_right (fun x acc -> if f x then x :: acc else acc) lst []
 ```
 
-🧠 **Note**:
+**Note**:
 
 * Fold helps abstract recursion, but may sacrifice **readability**.
 * OCaml’s standard library prefers direct recursion for clarity.
 
 ---
 
-## 🔹 4.4.8. Comparing Recursive, Fold, and Library Functions
+# Comparing Recursive, Fold, and Library Functions
 
 Example: `lst_and : bool list -> bool` (returns true if all elements are true)
 
 | Approach         | Code                                           | Lazy?                          |       |
 | ---------------- | ---------------------------------------------- | ------------------------------ | ----- |
-| Recursive        | \`let rec lst\_and\_rec = function \[] -> true | h::t -> h && lst\_and\_rec t\` | ✅ Yes |
-| Fold             | `let lst_and_fold = List.fold_left (&&) true`  | ❌ No                           |       |
-| Library Function | `let lst_and_lib = List.for_all (fun x -> x)`  | ✅ Yes                          |       |
+| Recursive        | \`let rec lst\_and\_rec = function \[] -> true | h::t -> h && lst\_and\_rec t\` | Yes Yes |
+| Fold             | `let lst_and_fold = List.fold_left (&&) true`  | No No                           |       |
+| Library Function | `let lst_and_lib = List.for_all (fun x -> x)`  | Yes Yes                          |       |
 
 ---
 
-## 📌 Final Takeaways
+# Final Takeaways
 
 * **`fold_right`**: Non-tail-recursive, right-to-left
 * **`fold_left`**: Tail-recursive, left-to-right
 * Choose wisely based on **efficiency**, **operation type**, and **readability**
 * Folding enables compact, reusable implementations — but don’t overuse at cost of clarity
-
----
-
-Let me know if you'd like a **comparison chart** of `map`, `filter`, and `fold`, or a **visual diagram**!

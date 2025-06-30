@@ -1,10 +1,6 @@
-Here is a **concise and clear summary** of **Section 4.3: `filter`** in OCaml:
+# `filter`
 
----
-
-## 📘 4.3. `filter` – Summary Notes
-
-### ✅ **What is `filter`?**
+## **What is `filter`?**
 
 * `filter` is a **higher-order function** that:
 
@@ -13,9 +9,9 @@ Here is a **concise and clear summary** of **Section 4.3: `filter`** in OCaml:
 
 ---
 
-### 🧪 Example: Filtering Even and Odd Numbers
+## Example: Filtering Even and Odd Numbers
 
-#### Initial definitions:
+### Initial definitions:
 
 ```ocaml
 let even n = n mod 2 = 0
@@ -32,7 +28,7 @@ let rec odds = function
 
 ---
 
-### 🧠 Abstracting with `filter`
+## Abstracting with `filter`
 
 We notice the pattern in `evens` and `odds` is the same — only the condition differs.
 So, we factor out the predicate:
@@ -50,7 +46,7 @@ let evens = filter even
 let odds = filter odd
 ```
 
-✅ **Type**:
+**Type**:
 
 ```ocaml
 filter : ('a -> bool) -> 'a list -> 'a list
@@ -58,11 +54,11 @@ filter : ('a -> bool) -> 'a list -> 'a list
 
 ---
 
-## 🔁 4.3.1. **Filter and Tail Recursion**
+# **Filter and Tail Recursion**
 
-### ❌ Naïve version is not tail recursive.
+## Naïve version is not tail recursive.
 
-✅ Tail-recursive version:
+Tail-recursive version:
 
 ```ocaml
 let rec filter_aux p acc = function
@@ -78,35 +74,13 @@ let filter p = filter_aux p []
 
 ---
 
-### 🔍 Why the reversal?
+## Why the reversal?
 
 * Using `::` is **constant-time**, but prepends to the list.
 * Reversal makes result correct in **linear time**.
 * OCaml chooses to include reversal **by default in `List.filter`**, unlike `List.map`.
 
----
-
-## 🌍 4.3.2. Filter in Other Languages
-
-### 🔸 Python:
-
-```python
-list(filter(lambda x: x % 2 == 0, [1, 2, 3, 4]))  # → [2, 4]
-```
-
-* `filter` is lazy; `list()` forces evaluation.
-
-### 🔸 Java (Streams API):
-
-```java
-Stream.of(1, 2, 3, 4)
-  .filter(x -> x % 2 == 0)
-  .collect(Collectors.toList());  // → [2, 4]
-```
-
----
-
-## 📌 Final Takeaways
+# Final Takeaways
 
 | Concept                    | Key Point                               |
 | -------------------------- | --------------------------------------- |
@@ -116,7 +90,3 @@ Stream.of(1, 2, 3, 4)
 | Cross-language support     | Common in Python, Java, etc.            |
 
 > Like `map`, `filter` improves **code reuse, clarity, and abstraction** by factoring common patterns.
-
----
-
-Let me know if you’d like a comparison chart of `map` vs `filter` or a visual guide!

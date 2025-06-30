@@ -1,10 +1,6 @@
-Here’s a **concise and structured summary** of the key concepts from **Section 4.2: `map`** in OCaml:
+# `map`
 
----
-
-## 📘 4.2. `map` – Summary Notes
-
-### ✅ **What is `map`?**
+## **What is `map`?**
 
 `map` is a **higher-order function** that:
 
@@ -25,23 +21,27 @@ map : ('a -> 'b) -> 'a list -> 'b list
 
 ---
 
-### 🧩 **Abstraction via `map`**
+## **Abstraction via `map`**
 
-#### Before Abstraction:
+### Before Abstraction:
 
 ```ocaml
 let rec add1 = function | [] -> [] | h::t -> (h+1)::add1 t
 let rec concat_bang = function | [] -> [] | h::t -> (h^"!")::concat_bang t
 ```
 
-#### After Abstraction:
+### After Abstraction:
 
 * Common pattern: operate on each head element and recurse.
 * Only the operation `f h` differs.
 
 ```ocaml
-let transform f lst = match lst with ...   (* generic abstraction *)
-let map = transform                        (* renamed to `map` *)
+let rec transform f lst =          (* generic abstraction *)
+  match lst with
+  | [] -> []
+  | h :: t -> f h :: transform f t (* here f h updates the element *)
+
+let map = transform                (* renaming to map *)
 ```
 
 Now:
@@ -53,11 +53,11 @@ let concat_bang = map (fun x -> x ^ "!")
 
 ---
 
-### 🧠 4.2.1. **Side Effects and Evaluation Order**
+## **Side Effects and Evaluation Order**
 
-#### OCaml evaluates function arguments **right-to-left**.
+### OCaml evaluates function arguments **right-to-left**.
 
-Problem with naïve map:
+Problem with naive map:
 
 ```ocaml
 let rec map f = function | [] -> [] | h::t -> f h :: map f t
@@ -70,7 +70,7 @@ let p x = print_int x; x + 1
 map p [1;2]  (* prints 2, then 1 *)
 ```
 
-✅ **Fix using `let` to force left-to-right evaluation:**
+**Fix using `let` to force left-to-right evaluation:**
 
 ```ocaml
 let rec map f = function
@@ -80,9 +80,9 @@ let rec map f = function
 
 ---
 
-### 🌀 4.2.2. **Tail Recursion and Performance**
+## **Tail Recursion and Performance**
 
-#### 🧪 Attempt 1 (Tail Recursive, but Quadratic Time):
+### Attempt 1 (Tail Recursive, but Quadratic Time):
 
 ```ocaml
 let rec map_tr_aux f acc = function
@@ -92,7 +92,7 @@ let rec map_tr_aux f acc = function
 
 Result: **O(n²)** time complexity.
 
-#### ✅ Attempt 2 (Tail Recursive and Linear Time):
+### Attempt 2 (Tail Recursive and Linear Time):
 
 ```ocaml
 let rec rev_map_aux f acc = function
@@ -106,35 +106,13 @@ let map f lst = List.rev (rev_map f lst)
 * Reverses the list after transformation.
 * **O(n) time and tail recursive**.
 
-✅ **Lesson**:
+**Lesson**:
 
 * **Cons `::` is fast**, append `@` is slow.
 * **Tail recursion ≠ always better** — may trade time for space.
 
----
 
-### 🌍 4.2.3. **`map` in Other Languages**
-
-#### 🔸 Python:
-
-```python
-list(map(lambda x: x + 1, [1, 2, 3]))  # → [2, 3, 4]
-```
-
-* `map` is lazy; need `list()` to force evaluation.
-
-#### 🔸 Java (Streams API):
-
-```java
-Stream.of(1, 2, 3).map(x -> x + 1).collect(Collectors.toList());
-// → [2, 3, 4]
-```
-
-* Uses `Stream.map` and `collect()` to convert to list.
-
----
-
-## 📌 Final Takeaways
+## Final Takeaways
 
 | Concept             | Key Point                                            |
 | ------------------- | ---------------------------------------------------- |
@@ -145,7 +123,3 @@ Stream.of(1, 2, 3).map(x -> x + 1).collect(Collectors.toList());
 | Cross-Language      | `map` is universal (Python, Java, etc.)              |
 
 > Always prefer OCaml's built-in `List.map` for efficiency and clarity.
-
----
-
-Let me know if you’d like a visual comparison or code translation between OCaml ↔ Python ↔ JavaScript for map!

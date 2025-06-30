@@ -56,7 +56,7 @@ filter : ('a -> bool) -> 'a list -> 'a list
 
 # **Filter and Tail Recursion**
 
-## Naïve version is not tail recursive.
+## Naive version is not tail recursive.
 
 Tail-recursive version:
 
